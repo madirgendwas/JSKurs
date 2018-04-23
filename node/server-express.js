@@ -1,4 +1,3 @@
-
 var fs      = require ('fs');
 var express = require ('express');
 var bp      = require ('body-parser');
@@ -11,13 +10,13 @@ var server = app.listen(5000, function(){
 })
 
 app.use(function(req, res, next) {
-    res.setHeader('content-type', 'text/javascript')
+    res.setHeader('content-type', 'text/html')
     res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Method', 'GET, POST')
     next();
 })
 
 app.get( '/', function(req, res){
-    
+    res.writeHeader (200);
     res.end('OK');
 })

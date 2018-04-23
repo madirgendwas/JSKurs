@@ -7,12 +7,12 @@
 	<script>
 
         $( document ).on('click', 'button', function(){
-            console.log("mach");
+            
             $.ajax({
                 url:'http://localhost:5000',
                 method:'get',
                 data:{},
-                // dataType:'text/javascript',
+                dataType:'text',
                 success:function(antwort){
                     $('<div>').html(antwort).appendTo('body');
                 }
