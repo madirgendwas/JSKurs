@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+        $( document ).on('click', 'button', function(){
+
+            $.ajax({
+                url:'http://localhost:5000',
+                method:'POST',
+                data:{},
+                dataType:'text',
+                success:function(antwort){
+                    $('<div>').html(antwort).appendTo('body');
+                }
+            })
+        });
+
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+    <button> ich bins</button>
+
+</body>
+</html>

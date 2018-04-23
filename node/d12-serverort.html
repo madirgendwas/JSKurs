@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+         $( document ).on('click', 'button', function(){
+			 var ortdata = {
+				 ort:$('#ort').val(),
+				 lat:$('#lat').val(),
+				 lng:$('#lng').val()
+			 }
+             $.ajax({
+                 url:'http://localhost:5001/ort',
+                 method:'POST',
+                 data:ortdata,
+				 dataType:'json',
+                 success:function(antwort){
+                    $('<div>').html(antwort).appendTo('body');
+                 }
+             })
+         });
+
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+	<label for="ort">Ort</label>
+	<input id='ort' type='text'></input>
+	<label for="lat">Lat:</label>
+	<input id='lat' type='text'></input>
+	<label for="lng">Lng:</label>
+	<input id='lng' type='text'></input>
+    <button> Save</button>
+
+</body>
+</html>
