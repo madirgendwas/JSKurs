@@ -1,3 +1,7 @@
 Hi Git
 änderungen in the cloud
+<<<<<<< HEAD
 änderung das
+=======
+änderung web
+>>>>>>> 141b814c875756d3cc8827c739adab8e38711560
