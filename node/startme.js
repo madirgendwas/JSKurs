@@ -3,9 +3,11 @@ var cp = require ("child_process");
 
 var file = "server-express.js";
 var file1 = "server-expressort.js";
+var file2 = "server-jet.js";
 
 var server = cp.fork(file); // starte den server
 var server1 = cp.fork(file1); // starte den server
+var server2 = cp.fork(file2); // starte den server
 console.log("first time start");
 fs.watchFile(file, function(){
     server.kill();
@@ -20,3 +22,10 @@ fs.watchFile(file1, function(){
     server1 = cp.fork(file1);
     console.log("start service1");
 })
+
+fs.watchFile(file2, function(){
+     server2.kill();
+     console.log("stop service2");
+     server2 = cp.fork(file2);
+     console.log("start service2");
+ })

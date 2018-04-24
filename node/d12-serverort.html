@@ -84,7 +84,7 @@
 
 		var zeigeOrte = function(){
 
-			$('#orte > *').remove();
+			$('#orte').empty();
 
 			for (i=0;i<alleorte.orte.length;i++){
 				$('#orte').append(
@@ -140,7 +140,6 @@
    			error:function(){
    					console.log("delete mit error")
    				  }
-
 			 })
 		 }
 
