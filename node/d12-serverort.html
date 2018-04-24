@@ -4,38 +4,189 @@
 	<title></title>
 	<meta charset="utf-8">
     <script src="jquery-3.3.1.min.js"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
 	<script>
 
-         $( document ).on('click', 'button', function(){
+	var alleorte = {};
+	kartenoption = {
+		center:{lat:43, lng:43},
+		zoom:6
+	}
+
+	$( document).on("click", '#getadress', function(event){
+		 event.preventDefault();
+		 var adress = $('#adress').val();
+
+     	 geocoder.geocode({'address': adress}, function(results, status) {
+		     if (status === 'OK') {
+		       karte.setCenter(results[0].geometry.location);
+		        // var marker = new google.maps.Marker({
+		        //   map: resultsMap,
+		        //   position: results[0].geometry.location
+		        //});
+		      } else {
+		        alert('Geocode was not successful for the following reason: ' + status);
+		      }
+		    });
+	})
+
+
+		$( document).on("click", '#getpos', function(event){
+			 event.preventDefault();
+			 ort = karte.getCenter();
+
+			 $('#lat').val(ort.lat());
+			 $('#lng').val(ort.lng());
+
+		})
+
+         $( document ).on('click', '#save', function(event){
+			 event.preventDefault();
+
 			 var ortdata = {
-				 ort:$('#ort').val(),
-				 lat:$('#lat').val(),
-				 lng:$('#lng').val()
-			 }
+	 			ort:$('#ort').val(),
+	 			lat:$('#lat').val(),
+	 			lng:$('#lng').val()
+	 		}
+
              $.ajax({
                  url:'http://localhost:5001/ort',
                  method:'POST',
-                 data:ortdata,
-				 dataType:'json',
+				 contentType: "application/json",
+                 data:JSON.stringify(ortdata),
+				 //dataType:'json',
                  success:function(antwort){
-                    $('<div>').html(antwort).appendTo('body');
-                 }
+					 		readOrte();
+                 		 },
+				 error:function(){
+					 	console.log("save mit error");
+				 		}
              })
          });
 
+		 var readOrte = function(){
+			 $.ajax({
+				 url:'http://localhost:5001/getorte',
+				 method:'POST',
+				 contentType: 'application/text',
+				 data:{},
+				 dataType:'json',
+				 success:function(antwort){
+					 		alleorte = antwort
+				  			zeigeOrte()
+						},
+				error:function(){
+						console.log("read mit error")
+					  }
 
+		 	})
+		}
+
+		var zeigeOrte = function(){
+
+			$('#orte > *').remove();
+
+			for (i=0;i<alleorte.orte.length;i++){
+				$('#orte').append(
+					$('<div>').append(
+						$('<span>').html('Ort: '),
+						$('<span>').html(alleorte.orte[i].ort),
+						$('<span>').html(' Lat: '),
+						$('<span>').html(alleorte.orte[i].lat),
+						$('<span>').html(' Lng : '),
+						$('<span>').html(alleorte.orte[i].lng),
+						$('<button>')
+							.html("set Position")
+							.data('i', i)
+							.on("click", function() {
+								setPosition(this);
+							}),
+						$('<button>')
+						 	.html("delete Position")
+						 	.data('i', i)
+						 	.on("click", function() {
+						 		deletePosition(this);
+						 	})
+
+					)
+				)
+			}
+		}
+
+		var setPosition = function(button){
+			var latpos = alleorte.orte[$(button).data('i')].lat * 1;
+			var lngpos = alleorte.orte[$(button).data('i')].lng * 1;
+			karte.setCenter({lat:latpos, lng:lngpos});
+			// var position = {
+			// 	lat:alleorte.orte[$(button).data('i')].lat,
+			// 	lng:alleorte.orte[$(button).data('i')].lng
+			// }
+			// console.log(position);
+			// karte.setCenter(position);
+//			console.log($(button).data('i'));
+		}
+
+		var deletePosition = function(button){
+			$.ajax({
+   			 url:'http://localhost:5001/deleteorte',
+   			 method:'POST',
+   			 contentType: 'application/text',
+   			 data:{},
+   			 dataType:alleorte.orte[$(button).data('i')].ort,
+   			 success:function(antwort){
+   						alleorte = antwort
+   						zeigeOrte()
+   					},
+   			error:function(){
+   					console.log("delete mit error")
+   				  }
+
+			 })
+		 }
+
+
+		var karte;
+		var geocoder;
+		var initMap = function(){
+			karte = new google.maps.Map(document.getElementById("meineKarte"), kartenoption);
+			geocoder = new google.maps.Geocoder();
+		}
+
+		readOrte();
 	</script>
 	<style>
+	#meineKarte {width:800px; height:800px; border:1px solid;}
+	#links {position:relative;}
+	#rechts {position:absolute; float:right; top:20px; right:20px;}
+	#adresslabel {margin-left: 400px}
 	</style>
 </head>
-<body>
-	<label for="ort">Ort</label>
-	<input id='ort' type='text'></input>
-	<label for="lat">Lat:</label>
-	<input id='lat' type='text'></input>
-	<label for="lng">Lng:</label>
-	<input id='lng' type='text'></input>
-    <button> Save</button>
 
+<body>
+	<div>
+		<div id="links">
+			<h1> Orteverwaltung mit NodeJS </h1>
+			<h2> neue Orte </h2>
+			<form id="adressen">
+				<label for="ort">Ort</label>
+				<input id='ort' type='text'></input>
+				<label for="lat">Lat:</label>
+				<input id='lat' type='text'></input>
+				<label for="lng">Lng:</label>
+				<input id='lng' type='text'></input>
+    			<button id="save"> Save</button>
+				<button id="getpos"> get Position</button><br><br><br>
+				<label id="adresslabel" for="adresse">Adresse</label>
+				<input id="adress" type="text"></input>
+				<button id="getadress"> get GeoPosition</button><br>
+			</form>
+			<br><br>
+			<h2> gespeicherte Orte </h2>
+				<div id='orte'></div>
+		</div>
+		<div id="rechts">
+			<div id="meineKarte"></div>
+		</div>
+	</div
 </body>
 </html>
