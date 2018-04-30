@@ -1,0 +1,207 @@
+<!doctype html>
+<html>
+<head>
+	<title>mein Rechner</title>
+	<meta charset="utf-8">
+	<script src="wififunktionen.js"> </script>
+	<script>
+
+	var ergebnis = 0
+	var operant = '';
+	var nimmzahl = function(zahl)
+	{
+		el('feld').value = el('feld').value  + zahl;
+	}
+
+	var rechne = function()
+	{
+		console.log(operant + ":" + ergebnis);
+		if(operant == '')
+		{
+			ergebnis = el('feld').value * 1;
+		}
+		else if (operant == '+')
+		{
+			ergebnis+= el('feld').value * 1;
+		}
+		else if (operant == '-')
+		{
+			ergebnis-= el('feld').value * 1;
+		}
+		else if (operant == '/')
+		{
+			ergebnis/= el('feld').value * 1;
+		}
+		else if (operant == '*')
+		{
+			ergebnis*= el('feld').value * 1;
+		}
+
+		console.log(operant + ":" + ergebnis);
+	}
+
+	window.onload = function()
+	{
+		 el('f1').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(1);
+		 }
+		 el('f2').onclick = function(event)
+		 {
+			event.preventDefault();
+			nimmzahl(2);
+		 }
+		 el('f3').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(3);
+		 }
+		 el('f4').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(4);
+		 }
+		 el('f5').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(5);
+		 }
+		 el('f6').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(6);
+		 }
+		 el('f7').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(7);
+		 }
+		 el('f8').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(8);
+		 }
+		 el('f9').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			nimmzahl(9);
+		 }
+		 el('f0').onclick = function(event)
+		 {
+			event.preventDefault();
+			nimmzahl(0);
+		 }
+
+
+		 el('fadd').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			rechne()
+			operant = "+";
+			el('feld').value = "";
+		 }
+
+		 el('fmal').onclick = function(event)
+		 {
+			event.preventDefault();
+			rechne()
+			operant = "*";
+			el('feld').value = "";
+		 }
+
+		 el('fdiv').onclick = function(event)
+		 {
+			event.preventDefault();
+			rechne()
+			operant = "/";
+			el('feld').value = "";
+		 }
+
+		 el('fmin').onclick = function(event)
+		 {
+		 	event.preventDefault();
+			rechne()
+			operant = "-";
+			el('feld').value = "";
+		 }
+
+		 el('ferg').onclick = function(event)
+		 {
+			 event.preventDefault();
+			 rechne();
+			 el('feld').value = ergebnis;
+			 operant='';
+		 	 ergebnis = 0;
+		 }
+
+		// el('body').onlick = function(event)
+		// {
+		// 	evnet.preventDefault();
+		// }
+	}
+	</script>
+	<style>
+	 button
+	 {
+		background-color: :#254512;
+		padding: 32px 16px;
+		text-align: center;
+		font-size: 16px;
+		}
+		td
+		{
+			border: 2px black;
+			padding: 32px;
+		}
+		tr
+		{
+			border: 2px black;
+			padding: 32px;
+			text-align:center;
+		}
+
+	</style>
+</head>
+<body id="body">
+	<form id="formular">
+		<input type="text" autocomplete="off" id="feld" readonly> </br>
+		<table border="1">
+			<tr>
+				<td id="prozent"> % </td>
+				<td id="clear"> CE </td>
+				<td id="clearone"> C </td>
+				<td id="BS"> BS </td>
+				<td id="fdiv"> / </td>
+			</tr></br>
+			<tr>
+				<td id="wurzel"> W </td>
+				<td id="f7"> 7 </td>
+				<td id="f8"> 8 </td>
+				<td id="f9"> 9 </td>
+				<td id="fmal"> * </td>
+			</tr></br>
+			<tr>
+				<td id="x2"> x2 </td>
+				<td id="f4"> 4 </td>
+				<td id="f5"> 5 </td>
+				<td id="f6"> 6 </td>
+				<td id="fmin"> - </td>
+			</tr></br>
+			<tr>
+				<td id="x3"> x3 </td>
+				<td id="f1"> 1 </td>
+				<td id="f2"> 2 </td>
+				<td id="f3"> 3 </td>
+				<td id="fadd"> + </td>
+			</tr></br>
+			<tr>
+				<td id="f1x"> 1/x </td>
+				<td id="faddmin"> +- </td>
+				<td id="f0"> 0 </td>
+				<td id="fkomma"> , </td>
+				<td id="ferg"> = </td>
+			</tr></br>
+		</table>
+</body>
+</html>

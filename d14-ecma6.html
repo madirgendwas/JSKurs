@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+    /// OOP mit ES6
+
+    var tier = {
+        beine:4,
+        removeBein:function(){
+            this.beine--;
+        }
+    }
+
+    console.log(tier);
+
+    var o1 = {};
+    var o2 = new Object(); // ES5
+    var o3 = Object.create( Object.prototype );
+    var o4 = Object.create( {} );
+    var o5 = Object.create( null );
+
+    console.log(o1, o2, o3, o4, o5);
+
+    var elefant = Object.create( tier );
+    console.log(elefant);
+
+    // Eigenschaften von Objecten
+
+    var Kreis = function(r){
+        this.radius = r;
+    }
+
+    Object.defineProperty(Kreis.prototype, 'umfang', {
+        enumerable:false,
+        writable  :true,
+        value     :0
+    })
+
+    var k = new Kreis(3);
+    for (var i in k){
+        console.log(i, k[i]);
+    }
+    console.log(k);
+
+
+    class Tier {
+        constructor(beine){
+            this.beine = beine || 8;
+            this.toString = function(){
+                return "diese Tier hat " + this.beine + " Beine";
+            }
+        }
+    }
+
+    class TierMitNamen extends Tier{
+        constructor (beine, namen){
+            super(beine); // ruft const von tier auf
+            this.namen = namen;
+            this.toString = function(){
+                return this.namen +" hat " + this.beine + " Beine";
+            }
+        }
+    }
+
+    class SpinneMitNamen extends TierMitNamen{
+        constructor(namen){
+            super(8, namen);
+        }
+    }
+
+    var hund = new TierMitNamen(4,"Katze");
+    console.log(hund);
+    alert(hund);
+
+    var hund = new SpinneMitNamen("Du da");
+    console.log(hund);
+    alert(hund);
+
+
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+</body>
+</html>

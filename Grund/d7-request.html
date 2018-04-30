@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+	<title>Request Test</title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+	var ajaxLoader = function(){
+		$('<div id="ajaxLoader">')
+			.css({
+				position:'fixed',
+				top:0,
+				left:0,
+				right:0,
+				bottom:0,
+				background:'rgba(255,255,255,0.9)'
+			})
+			.appendTo('body')
+			.html('Daten werden geladen......<br><img src="ajax.gif">')
+	};
+	var ajaxClear = function(){
+		$('#ajaxLoader').remove();
+	};
+
+	$(document).on ('click', '#b1', function(event) {
+		event.preventDefault();
+
+		 $(this).prop('disabled', true);
+		ajaxLoader();
+	  var request = new XMLHttpRequest();
+		request.open('GET', 'http://wifi.1av.at/527/text.php');
+		request.send();
+		request.onreadystatechange = function(){
+			if (request.redyState = 4)
+			{
+				$('#ausgabe').html(request.responseText);
+				ajaxClear();
+
+				 $('#b1').prop('disabled', false);
+			}
+		}
+	});
+
+	</script>
+	<style>
+	* {font:1.5rem Arial;}
+	</style>
+</head>
+<body>
+	<button id="b1"> Starte Req</button>
+	<div id="ausgabe"></div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+	<title>Request Test</title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+	$(document).on('click', '#b1', function(event){
+		event.preventDefault();
+		var zahl = $('#zahl').val() * 1;
+
+		$.ajax({
+			url:'http://wifi.1av.at/527/r_post_html.php',
+			method:'POST',
+			data:{ x:zahl },
+			dataType:"HTML",
+			success:function(antwort){
+				console.log(antwort);
+				var response = JSON.parse(antwort);
+				console.log("server", "HTML", response.x)
+			}
+
+			});
+
+		$.ajax({
+			url:'http://wifi.1av.at/527/r_post_json.php',
+			method:'POST',
+			data:{ x:zahl },
+			dataType:"json",
+			success:function(antwort){
+				console.log(antwort);
+				console.log("server", "JSON", antwort.x)
+			}
+		});
+
+		$.ajax({
+			url:'http://wifi.1av.at/527/r_json_json.php',
+			method:'POST',
+			contentType:'application/json',
+		  data: JSON.stringify({ x:zahl }),
+			dataType:"json",
+			success:function(antwort){
+				console.log(antwort);
+				console.log("server", "JSON-JSON", antwort.x)
+			}
+		});
+
+
+			$.ajax({
+				url:'http://wifi.1av.at/527/r_get_jsonp.php',
+				method:'GET',
+			  data: { x:zahl },
+				dataType:"jsonp", // Antwort JAVAScript
+				jsonpCallback:'nameOfCallbackFunction',
+				success:function(antwort){
+					console.log(antwort);
+					console.log("server", "GET-JSONP", antwort.x)
+				}
+			});
+	});
+
+	</script>
+	<style>
+	* {font:1.5rem Arial;}
+	</style>
+</head>
+<body>
+	<input type="text" id="zahl" autocomplete="off"></input>
+	<button id="b1"> Berechne </button>
+	<div id="ausgabe"></div>
+
+</body>
+</html>

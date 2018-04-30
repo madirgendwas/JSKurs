@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+	<title>Taxi </title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+	$(document).ready(function(){
+
+		$('#clone').on('click', function(){
+			$('body').append($('svg').eq(0).clone());
+			setAnzahl();
+		});
+
+		$("svg > *").on('click', function(){
+			$(this).toggleClass('clicker');
+			$('form').show();
+		});
+
+		$("#go").on('click', function(event){
+			event.preventDefault();
+			var color = $('#newcolor').val();
+			$('.clicker').css({fill:color});
+			$('.clicker').removeClass('clicker');
+		});
+
+		$("#run").on('click', function(event){
+			event.preventDefault();
+			runAuto();
+		});
+
+		var runAuto = function(){
+			var position = $('svg').position();
+			position.left+=1;
+			$('svg').css({left:position.left});
+			setTimeout(function(){
+				runAuto()}, 50);
+		};
+
+		var setAnzahl = function(){
+			var autos = $('svg');
+			var anzahl = autos.length;
+			$('#anzahl').html(anzahl);
+		};
+		setAnzahl();
+	});
+
+	</script>
+	<style>
+	svg {position:relative; width:300px; height:300px;}
+	svg *:hover {cursor:crosshair;}
+	svg > text { font-size:30px; font-family: Arial;}
+	form {display:none;}
+	.clicker {fill:transparent !important; stroke:black;}
+	</style>
+</head>
+<body>
+	<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+		 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+			<polygon points="264.615,43.5 180,43.5 180,88.5 290.865,88.5 		"/>
+			<path d="M75,118.5c-41.355,0-75,33.645-75,75v30h180v-105H75z"/>
+			<path d="M0,348.5v60h45c0-23.053,8.671-44.077,22.924-60H0z"/>
+			<path d="M476.146,253.5H0v65h135c49.706,0,90,40.294,90,90h62c0-49.706,40.294-90,90-90s90,40.294,90,90h45V261.468L476.146,253.5z"/>
+			<path d="M372.631,164.812C357.482,138.843,322.065,118.5,292,118.5h-82v105h196.865L372.631,164.812z"/>
+			<path d="M135,348.5c-33.137,0-60,26.863-60,60c0,33.137,26.863,60,60,60s60-26.863,60-60C195,375.363,168.137,348.5,135,348.5z M135,423.5c-8.284,0-15-6.716-15-15s6.716-15,15-15s15,6.716,15,15S143.284,423.5,135,423.5z"/>
+			<path d="M377,348.5c-33.137,0-60,26.863-60,60c0,33.137,26.863,60,60,60c33.137,0,60-26.863,60-60	C437,375.363,410.137,348.5,377,348.5z M377,423.5c-8.284,0-15-6.716-15-15s6.716-15,15-15s15,6.716,15,15 S385.284,423.5,377,423.5z"/>
+			<text x="180" y="290" fill="red">Mein Taxi!</text>
+	</svg>
+
+	<button id="run"> run </button>
+	<button id="clone"> Add One </button>
+	<div id="anzahl"> </div>
+
+	<form id="eingabe">
+		<input type="color" id="newcolor"></input>
+		<button id="go"> los </button>
+	</form>
+
+
+</body>
+</html>

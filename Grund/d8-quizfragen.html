@@ -1,0 +1,365 @@
+<!doctype html>
+<html>
+<head>
+	<title>WifiQuiz</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="./jqueryui/jquery-ui.min.css">
+	<link rel="stylesheet" href="./jqueryui/jquery-ui.theme.min.css">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="wififunktionen.js"></script>
+	<script src="./jqueryui/jquery-ui.min.js"></script>
+	<script>
+
+	var lastReadDaten;
+	var database='';
+
+	$.ajaxSetup({
+		url:'http://wifi.1av.at/527/quizcms.php',
+		method:'post',
+		contentType:'application/json',
+		dataType:'json',
+	})
+
+	 $(document).ajaxError(function(e, jqxhr, settings, exception){
+		 alert(settings.url, " nicht erreichbar");
+
+	 });
+
+	$(document).ready(function(){
+		$( "#quizcms" ).tabs();
+		$('#allefragen').accordion();
+		$('form #id').val('');
+
+		for (i=1;i<=15;i++)
+		{
+			option = $('<option>', {
+							value: i,
+							text : i
+						});
+			$('#schwierigkeit').append(option);
+		};
+
+		 $('#quizcms').tabs({
+		 	activate: function(event, ui){
+				if(ui.newPanel.attr('id') == 'alle') {
+					leseFragen()
+				}
+		 	}
+		 });
+
+		 $( "#quizcms" ).on( "tabsactivate",
+		 	function( event, ui ) {
+				database=$('#db').val();
+			} );
+	});
+
+	$(document).on('click', '#edit', function() {
+		var id = $(this).attr('data-id');
+
+		for(i=0;i<lastReadDaten.fragen.length;i++){
+			if (id == lastReadDaten.fragen[i].id){
+				$('#id').val(lastReadDaten.fragen[i].id);
+				$('#neu #frage').val(lastReadDaten.fragen[i].frage);
+				$('#antwort1').val(lastReadDaten.fragen[i].antworten[0]);
+				$('#antwort2').val(lastReadDaten.fragen[i].antworten[1]);
+				$('#antwort3').val(lastReadDaten.fragen[i].antworten[2]);
+				$('#antwort4').val(lastReadDaten.fragen[i].antworten[3]);
+				$('[name="a"][value="' + lastReadDaten.fragen[i].richtig + '"]').prop('checked', true);
+				$('#schwierigkeit').val(lastReadDaten.fragen[i].schwierigkeit);
+			}
+		}
+
+		$("#quizcms").tabs("option", "active", 2);
+		console.log($(this).parent().prev().html());
+		//$('#neu #frage').val($(this).parent().html);
+	});
+
+
+
+	$(document).on('click', '#delete', function() {
+
+		var button = $(this);
+		var deleteFrage = {
+			anfragetyp:'entfernen',
+			id:$(this).attr('data-id'),
+			db:database
+		};
+		$.ajax({
+			data:JSON.stringify(deleteFrage),
+			success:function(antwort){
+				if(antwort.erfolg){
+					alert("frage gelöscht", "OK")
+					$(button).parent('div').hide();
+					$(button).parent('div').prev().hide();
+				}
+				else {
+					alert("Fehler bei löschen ")
+				}
+			},
+			complete:function(){
+				//refreshFragen();
+			}
+		});
+	});
+
+	$(document).on('click', '#speichern', function(event){
+		event.preventDefault();
+
+		var isEdit;
+
+		var neueFrage = {};
+		var antworten = [];
+
+
+		if ($('#id').val() * 1 > 0){
+				neueFrage.id = $('#id').val() * 1;
+				neueFrage.anfragetyp='edit';
+				isEdit = true;
+		}
+		else {
+			neueFrage.anfragetyp = 'neu';
+			isEdit = false;
+		};
+
+		neueFrage.frage = $('#frage').val();
+		antworten[0] = $('#antwort1').val();
+		antworten[1] = $('#antwort2').val();
+		antworten[2] = $('#antwort3').val();
+		antworten[3] = $('#antwort4').val();
+		neueFrage.antworten = antworten;
+		neueFrage.schwierigkeit = $('#schwierigkeit').val();
+
+		neueFrage.richtig = $('[name="a"]:checked').val();
+		neueFrage.db = database;
+
+		$('#speichern').prop('disabled', true);
+		$.ajax({
+			data:JSON.stringify(neueFrage),
+			success:function(antwort){
+				if(isEdit){
+					if(antwort.erfolg)
+					{
+						alert("Daten wurden gespeichert", 'Hinweis');
+					}
+					else
+					{
+						alert("Fehler bei UPDATE");
+					}
+				}
+				else
+				{
+					if(antwort.id){
+						alert("Daten wurden gespeichert", 'Hinweis');
+						$('#neu form').get(0).reset();
+					} else {
+						switch (antwort.fehlernummer){
+							case 407:
+								alert('Daten nicht vollständig', 'Fehler');
+								break;
+							case 408:
+								alert('Frage bereits vorhanden', 'Fehler');
+								break;
+
+							default:
+								alert('Anderer Fehler: ' + antwort.fehlernummer);
+								break;
+						}
+					}
+				}
+			},
+			error:function (e){
+				// console.log(e);
+				alert('Server nicht errechbar', 'ServerError');
+			},
+			complete:function(){
+				$('#speichern').prop('disabled', false);
+			}
+		});
+	});
+
+	$(document).on('click', '#clear', function(event){
+		event.preventDefault();
+
+		$('#neu form').get(0).reset();
+	});
+
+
+	var alertdisplay = function(meldung, title){
+		title=title||'Error';
+		$('#alert-dialog').attr('title', title);
+		$('#alert-dialog p').html(meldung);
+		$('#alert-dialog').dialog({
+			modal:true,
+			buttons:{
+				Ok:function(){
+					$(this).dialog('close');
+				}
+			}
+		})
+	}
+	window.alert = alertdisplay;
+
+
+	var leseFragen = function(){
+		lesen = {
+			anfragetyp:'lesen',
+			db:database
+		};
+
+		$.ajax({
+			data:JSON.stringify(lesen),
+			success:function(antwort){
+				setFragen(antwort)
+			}
+		});
+	};
+
+
+	var setFragen = function(antwort){
+		lastReadDaten = antwort;
+		$('#allefragen').empty();
+
+		for (i=0;i<antwort.fragen.length;i++)
+		{
+			//console.log(antwort.fragen[i].frage);
+			header = $('<h3>').html(antwort.fragen[i].frage);
+			div = $('<div>');
+			var text = antwort.fragen[i].antworten[0] + '<br>'
+			text+= antwort.fragen[i].antworten[1] + '<br>'
+			text+= antwort.fragen[i].antworten[2] + '<br>'
+			text+= antwort.fragen[i].antworten[3] + '<br><br>'
+
+			var richtig = antwort.fragen[i].richtig *1;
+
+			text+= "richtige Antwort : " +  antwort.fragen[i].antworten[antwort.fragen[i].richtig] + " (" + (richtig + 1 * 1) + ")<br><br>";
+
+			text+= "Schwierigkeit: " +  antwort.fragen[i].schwierigkeit;
+
+
+			deletebutton = $('<button id="delete" data-id="' + antwort.fragen[i].id + '"> Lösche Frage </button>');
+			editbutton   = $('<button id="edit"   data-id="' + antwort.fragen[i].id + '"> Ändern Frage </button>');
+			editbutton.data('i', antwort.fragen[i].id);
+			p=$('<p>').html(text);
+			div.append(p);
+			div.append(editbutton);
+			div.append(deletebutton);
+			$('#allefragen').append(header);
+			$('#allefragen').append(div);
+
+		};
+
+		$('#allefragen').accordion('refresh');
+
+	};
+	</script>
+
+	<style>
+
+
+	h1{
+		text-align: center;
+	}
+
+	table{
+		margin-left: 100px;
+	}
+
+	th{
+		width:500px;
+	}
+
+	th input[type="text"]{
+		width:300px;
+	}
+
+	#antwortblock{
+		margin-top: 40px;
+	}
+
+	#frage{
+		margin-left:55px;
+		width:600px;
+	}
+
+#antwortblock > div { float:left; }
+
+	</style>
+</head>
+<body>
+	<div id="quizcms">
+		<ul>
+			<li><a href='#home'>Home</a></li>
+			<li><a href='#alle'>Zeige alle Fragen</a></li>
+			<li><a href='#neu'>Neue Frage</a></li>
+		</ul>
+		<div id="home">
+			<h1> Willkommen bei unserem Quiz </h1>
+			<p> nur für berechtigte User</p>
+
+			<label for="db">Datenbank:</label>
+			<input type="text" id="db" autocomplete="off"></input>
+		</div>
+
+		<div id="alle">
+			<h1> Fragen </h1>
+			<div id="allefragen"></div>
+		</div>
+
+		<div id="neu">
+			<h1> Frage anlegen / ändern</h1>
+			<form>
+				<label for="frage"> Frage: </label>
+				<input type="text" id="frage" autocomplete="off"></input>
+				<label for="id"> id: </label>
+				<input type="text" id="id" disabled="true"></input>
+				<br>
+				<div id=antwortblock>
+					<div> Antworten </div>
+					<table id="antworten">
+						<tr>
+							<th>
+								<div>
+									<input type="text" id="antwort1" autocomplete="off"></input>
+									<input type="radio" name="a" value="0"></input>
+								</div>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								<div>
+									<input type="text" id="antwort2" autocomplete="off"></input>
+									<input type="radio" name="a" value="1"></input>
+								</div>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								<input type="text" id="antwort3" autocomplete="off"></input>
+								<input type="radio" name="a" value="2"></input>
+							</th>
+						</tr>
+						<tr>
+							<th>
+								<input type="text" id="antwort4" autocomplete="off"></input>
+								<input type="radio" name="a" value="3"></input>
+							</th>
+						</tr>
+					</table>
+				</div>
+
+				<br>
+				<label for="schwierigkeit"> Schwierigkeit: </label>
+				<select id="schwierigkeit"></select>
+				<br>
+				<br>
+				<button id="speichern">Speichern</button>
+				<button id="clear">Clear</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="alert-dialog" title="Error">
+		<p>  </p>
+	</div>
+</body>
+</html>

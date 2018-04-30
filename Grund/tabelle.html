@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="wififunktionen.js"> </script>
+	<script>
+	window.onload = function()
+	{
+		var zaehler = 0;
+		var tablescript = "<table border =1>";
+		var i, j;
+		for(i=1;i<=4;i++)
+		{
+			console.log(i);
+			tablescript+="<tr>"
+				for (j=1;j<=5;j++)
+				{
+					zaehler++
+					tablescript+="<td>" + zaehler + "</td>"
+				}
+			tablescript+="</tr>"
+		}
+		tablescript+="</tabele>"
+		el('ausgabe').innerHTML = tablescript;
+		console.log(tablescript);
+
+	}
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+<div id="ausgabe"><div>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
+	<script>
+
+	var meineOrte=[];
+
+	var meinOrt = {};
+
+	kartenoption = {
+		center:{lat:10, lng:10},
+		zoom:13
+	}
+
+	$(document).ready(function(){
+
+//		var position = {lat:48.212, lng:16.448}
+//		karte.setCenter(position);
+
+		// var meinMarker = new google.maps.Marker({
+		// 	position: position,
+		// 	map:karte,
+		// 	label:"da will ich hin"
+		// })
+
+		// karte.setCenter(position);
+
+
+		// navigator.geolocation.getCurrentPosition(function(position){
+		// 		new google.maps.Marker({
+		// 		position: {lat:position.coords.latitude, lng:position.coords.longitude},
+		// 		map:karte,
+		// 		label:"da bin ich"
+		// 	});
+		// karte.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+		// });
+
+		 // };
+
+		console.log(8, meineOrte);
+
+		$('#speichern').on('click', function(event){
+			event.preventDefault();
+			var ort = karte.getCenter();
+			setMarker(ort, $('#ort').val());
+			speicherOrt(ort, $('#ort').val());
+
+		});
+	});
+
+
+
+
+	var karte;
+	var initMap = function(){
+		karte = new google.maps.Map(document.getElementById("meineKarte"), kartenoption);
+		setKreuz();
+		holeOrte();
+	};
+
+	var setMarker = function(ort, ortsname){
+		console.log(ort, ortsname)
+		 var meinMarker = new google.maps.Marker({
+		 	position: ort,
+		 	map:karte,
+		 	label:ortsname
+		 })
+	}
+
+	var speicherOrt = function(ort, ortsname){
+
+		meinOrt.ortname = ortsname;
+		meinOrt.position = ort;
+
+		meineOrte.push(meinOrt);
+
+		localStorage.setItem('Orte', JSON.stringify(meineOrte));
+
+	}
+
+	var holeOrte = function(){
+		meineOrte = JSON.parse(localStorage.getItem('Orte'));
+			for (i=0;i<meineOrte.length;i++){
+	  		meinOrt = meineOrte[i];
+	  		var ortsname = meinOrt.ortname;
+	  		var position = meinOrt.position;
+	  		setMarker (position, ortsname);
+  		};
+  	};
+
+	var setKreuz = function(){
+		var kreuz = $("#kreuz").get(0).getContext('2d');
+		kreuz.strokeStyle = 'red';
+		kreuz.moveTo(75, 0)
+		kreuz.lineTo(75,150);
+		// kreuz.stroke();
+		// kreuz.endPath();
+		kreuz.moveTo(0, 75);
+		kreuz.lineTo(150, 75);
+		kreuz.stroke();
+		kreuz.closePath()
+	}
+
+	</script>
+	<style>
+	#meineAnzeige {width:600px; height:600px; position:relative; border:1px solid; }
+	#meineKarte {width:600px; height:600px;}
+	#kreuz {position:absolute; top:225px; left:225px; pointer-events: none}
+	input {margin-top: 10px}
+	button {margin-top: 10px}
+	</style>
+</head>
+<body>
+	Hi,
+	<div id="meineAnzeige">
+		<div id="meineKarte"></div>
+		<canvas id="kreuz" width="150" height="150"></canvas>
+		<input id='ort' type="text"></input>
+		<button id="speichern">Ort speichern</button>
+	</div>
+</body>
+</html>

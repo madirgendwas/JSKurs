@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="wififunktionen.js"></script>
+	<script>
+
+	var countdown = function(c, id, timer, callback){
+		$(id).html(c);
+
+		if (c == 0 ) {
+			callback();
+			return;
+		};
+		if(c >= 0)
+		{
+			setTimeout(function() {
+				//c--;
+				countdown( --c, id, timer, callback);
+			}, timer);
+		};
+	};
+
+	var countdownInterval = function(c, id, timer){
+		$(id).html(c);
+
+		var myInterval = setInterval(function(){
+			if (c == 1)
+			{
+				clearInterval(myInterval);
+			};
+			c--;
+			$(id).html(c);
+		}, timer);
+	};
+
+	var countdownRAF = function(c, id, start, timer){
+		$(id).html(c);
+
+		if (c == 0 ) return;
+		requestAnimationFrame(function() {
+			if (Date.now() - start >=timer)
+			{
+				c--;
+				start = Date.now();
+			};
+
+			countdownRAF(c, id, start, timer)
+		});
+	};
+
+	var setAusgabe = function(id, colorid){
+		$(id).css({color: colorid});
+	}
+
+	$(document).on('click', '#start', function(){
+
+		var counter = 5;
+		var counter2 = 10;
+		var counter3 = 20;
+		$('#ausgabe').html(counter);
+		$('#ausgabe2').html(counter);
+		$('#ausgabe3').html(counter);
+
+		countdown(counter, '#ausgabe', 600, function() {setAusgabe('#ausgabe', 'blue')});
+		countdown(counter2, '#ausgabe2', 300, function() {setAusgabe('#ausgabe2', 'red')});
+		countdown(counter3, '#ausgabe3', 150, function() {setAusgabe('#ausgabe3','green')});
+		countdownInterval(40, '#ausgabe4', 75);
+		countdownRAF(80, '#ausgabe5', Date.now(), 38);
+		// setTimeout(function() {
+		// 	counter--;
+		// 	$('#ausgabe').html(counter);
+		// 	} , 1000);
+
+	});
+
+	</script>
+	<style>
+	div {
+		font:25px Arial;
+	}
+	</style>
+</head>
+<body>
+	<div id="ausgabe"></div>
+	<div id="ausgabe2"></div>
+	<div id="ausgabe3"></div>
+	<div id="ausgabe4"></div>
+	<div id="ausgabe5"></div>
+	<button id="start">Starte Countdown</button>
+</body>
+</html>

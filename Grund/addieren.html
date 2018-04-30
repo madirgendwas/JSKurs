@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+	<title>Addieren x</title>
+	<meta charset="utf-8">
+	<script>
+    window.onload = function()
+    {
+      document.getElementById('mache').onclick = function( event )
+      {
+        event.preventDefault(); // vehindert abschicken formular (button)
+          //var zahl1, zahl2, zahl3;
+          //document.getElementById('z1').style.color = "black";
+          document.getElementById('z1').style.backgroundColor = null;  // kein wert standardfarbe null oder ""
+          //document.getElementById('z2').style.color = "black";
+          document.getElementById('z2').style.backgroundColor = "white";
+          var zahl1 = document.getElementById('z1').value * 1; // in number umwandeln
+          var zahl2 = document.getElementById('z2').value * 1;
+          var zahl3 = (zahl1 + zahl2);
+          if(zahl3 > 0 || zahl3 < 0)
+          {
+            document.getElementById('z3').innerHTML = "Summe " + zahl1 +" + " + zahl2 + '=<strong id="betrag">' + " " + zahl3 + '</strong>' ;
+            if(zahl3 < 0)
+            {
+              document.getElementById('betrag').style.color="red"
+            }
+            else
+            {
+              document.getElementById('betrag').style.color="blue"
+            }
+          }
+          else
+          {
+            document.getElementById('z3').innerHTML = 'Bitte nur Zahlen Danke';
+            if (isNaN(zahl1))
+            {
+              document.getElementById('z1').style.backgroundColor = "red";
+              //document.getElementById('z1').style = "meiner";
+            }
+            if (isNaN(zahl2))
+            {
+              document.getElementById('z2').style.backgroundColor = "red";
+            }
+          }
+      } //onlclick mache
+    } //onload
+    //    <input style="text-align:right;width:250px" type="number" placeholder="0.00" id="z1" autocomplete="off"/> </br>
+    //    <input style="text-align:right;width:250px" type="number" placeholder="0.00" id="z2" autocomplete="off"/> <button id="mache">mach jetzt</button> </br>
+  </script>
+	<style>
+
+
+  </style>
+  </head>
+  <body>
+    <h1> Addieren </h1>
+    <form>
+      <input id="z1" autocomplete="off"/> </br>
+      <input id="z2" autocomplete="off"/> <button id="mache">mach jetzt</button> </br>
+      <div id="z3" />
+    </form>
+  </body>
+</html>

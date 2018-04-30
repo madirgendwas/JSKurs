@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+	<title>Zahl erraten</title>
+	<meta charset="utf-8">
+	<script src="wififunktionen.js"></script>
+
+	<script>
+	 window.onload = function()
+	 {
+		 var maxversuche = 4;
+		 var versuche = 0;
+		 var meineZahl = 0;
+		 var testZahl = 0;
+		 var haserror = false;
+		 meineZahl = Math.floor(Math.random()*10)+1;
+
+		 el('test').onclick = function(event)
+		 {
+			 haserror = false;
+			event.preventDefault();
+
+			 testZahl = el('feld').value * 1;
+			 if (isNaN(testZahl))
+			 {
+				 haserror = true;
+			 }
+
+			if (testZahl < 1 || testZahl > 10)
+			{
+				haserror = true;
+			}
+
+			if(haserror)
+			{
+				el('ausgabe').innerHTML = "Falsche Eingabe. Bitte nochmals versuchen"
+			}
+			else
+			{
+				versuche++
+
+				if(testZahl < meineZahl)
+				{
+					el('ausgabe').innerHTML = "etwas höher gehts"
+				}
+
+				if(testZahl > meineZahl)
+				{
+					el('ausgabe').innerHTML = "nicht so viel bitte"
+				}
+				if(testZahl == meineZahl)
+				{
+
+			  	el('ausgabe').innerHTML = "Gratulation!!! Sie haben " + versuche + " benötigt- auf ein neues"
+					versuche = 0;
+					maxversuche=4;
+		 		  meineZahl = Math.floor(Math.random()*10)+1;
+				}
+				else
+				{
+
+					maxversuche--;
+					if (maxversuche==3)
+					{
+							el('balken').style.backgroundColor = "blue";
+					}
+					else if (maxversuche == 2)
+					{
+						el('balken').style.backgroundColor = "brown";
+					}
+					else if (maxversuche == 1)
+					{
+						el('balken').style.backgroundColor = "yellow";
+					}
+					else {
+						el('balken').style.backgroundColor = "red";
+						el('ausgabe').innerHTML = "Das war wohl nichts- auf ein neues"
+						versuche = 0;
+						maxversuche=4;
+			 		  meineZahl = Math.floor(Math.random()*10)+1;
+						
+					}
+				}
+			}//if =
+		}
+	}
+
+	</script>
+	<style>
+	#balken {
+		margin: 0;
+		padding: 0;
+		height: 50px;
+		background-color: green;
+	}
+	</style>
+</head>
+<body>
+	<form id="formular">
+		Bitte eine Zahl zwischen 1 und 10 erraten<input type="text" id="feld" autocomplete="off">
+		 <button id="test"/> Test </button>
+		 <div id="ausgabe"></div>
+		 <div id="balken"></div>
+	</form>
+</body>
+</html>

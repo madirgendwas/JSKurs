@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+	<title>Umfang berechnen</title>
+	<meta charset="utf-8">
+	<script src="wififunktionen.js"></script>
+	<script>
+
+		window.onload = function()
+		{
+			el('formular').onsubmit = function (event)
+			{
+				event.preventDefault();
+				var radius, umfang;
+				radius = el('eingabe').value * 1;
+				umfang = runden(umfangberechne(radius), el('nachkomma').value * 1);
+				document.getElementById('umfang').innerHTML = umfang;
+			}
+		}
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+	<form id="formular">
+		Radius: <input type="text" id="eingabe" autocomplete="off">
+		Nachkomma <input type="text" id="nachkomma" autocomplete="off">
+		<button id="berechne"> Umfang  </button>
+		<div id="umfang"> </div>
+		</form>
+</body>
+</html>

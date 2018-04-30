@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+	$.ajaxSetup({
+		url:'http://wifi.1av.at/527/quiz.php',
+		method:'post',
+		contentType:'application/json',
+		dataType:'json',
+	})
+	var runTimer = false;
+	var stufe = 0;
+	var frageid = 0;
+
+	var checkFrage = function(nummer){
+		runTimer=false;
+		anfrage = {
+			anfragetyp:'check',
+			id:frageid,
+			antwort:nummer
+		};
+		$.ajax({
+			data:JSON.stringify(anfrage),
+			success:function(response){
+				nextFrage(response.korrekt)
+			}
+		});
+	}
+
+	var starteQuiz = function(){
+		$('#form').addClass('unsichtbar');
+		$('#frage').removeClass('unsichtbar');
+		nextFrage(true);
+	};
+
+	var nextFrage = function(antwort){
+		if(antwort){
+			stufe++;
+			getFrage();
+		}
+		else {
+			setHiScore();
+		}
+	};
+
+
+	var setHiSore = function(){
+		alert('ende');
+	};
+
+
+	var getFrage = function(){
+
+		$('#loading').removeClass('unsichtbar');
+		$('#frage').addClass('unsichtbar');
+		anfrage = {
+			anfragetyp:'frage',
+			schwierigkeit:stufe
+		};
+
+		$.ajax({
+			data:JSON.stringify(anfrage),
+			success:function(antwort){
+				$('#q').html(antwort.frage)
+				$('#b1').html(antwort.antworten[0])
+				$('#b2').html(antwort.antworten[1])
+				$('#b3').html(antwort.antworten[2])
+				$('#b4').html(antwort.antworten[3])
+				frageid = antwort.id;
+				startTimer();
+			},
+			complete:function(){
+				$('#loading').addClass('unsichtbar');
+				$('#frage').removeClass('unsichtbar');
+			}
+		});
+	}
+
+	var startTimer = function() {
+		runTimer = true;
+		startProgress(5 * 1000, Date.now());
+	}
+
+	var startProgress = function(wielange, start) {
+		$('progress').val(wielange / 5 / 1000);
+		if (wielange <= 0 ) return;
+		if (!runTimer) return;
+		requestAnimationFrame(function() {
+			wielange = wielange - (Date.now() - start);
+			startProgress(wielange, Date.now());
+		});
+	};
+
+	$(document).ready(function(){
+		$('#start').on('click', function(event){
+			event.preventDefault();
+			starteQuiz();
+		})
+		$('#b1').on('click', function(event){
+			event.preventDefault();
+			checkFrage(0);
+		});
+		$('#b2').on('click', function(event){
+			event.preventDefault();
+			checkFrage(1);
+		});
+		$('#b3').on('click', function(event){
+			event.preventDefault();
+			checkFrage(2);
+		});
+		$('#b4').on('click', function(event){
+			event.preventDefault();
+			checkFrage(3);
+		});
+	});
+	</script>
+	<style>
+	html, body { height:100%; padding:0; margin:0; }
+	body { overflow:hidden; }
+	#bg { filter: blur(0px); transform:scale(1); transition:transform 30s, filter 5s; position:absolute; z-index:-1; top:0; left:0; right:0; bottom:0; background:url(http://orf.at/static/images/site/news/20150939/millionenshow_15_jahre_body_assinger_a.4644228.jpg); background-size:cover; }
+	#bg.zoomHim { transform:scale(2);  filter: blur(10px); }
+	#wrapper {  display:flex; justify-content: center; align-items:center;
+		height:100%;}
+	form { text-align:center; }
+	#deinname { display:block; margin:0 auto; }
+	.unsichtbar{ display:none; }
+	#frage { text-align:center; }
+	#frage button { font-size:2em; }
+	</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="wrapper">
+	<form id="form" method="post" action="?">
+		<label>Dein Name</label>
+		<input type="text" id="deinname" autocomplete="off">
+		<button id="start">Los gehts</button>
+	</form>
+	<div id="loading" class="unsichtbar">
+		Frage wird geladen...
+	</div>
+	<div id="frage" class="unsichtbar">
+			<h1 id="q"></h1>
+			<button id="b1"></button>
+			<button id="b2"></button><br>
+			<button id="b3"></button>
+			<button id="b4"></button><br>
+			<progress value="1"></progress>
+		</div>
+</div>
+</body>
+</html>

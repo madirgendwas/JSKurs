@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="wififunktionen.js"></script>
+	<script>
+
+	var firstone = false;
+	var durchgang = 0;
+
+	var createWuerfel = function()
+	{
+
+		durchgang++;
+		$('td').off('click');
+		var table = $( '<table border="1">' ).appendTo( '#irgendwas' );
+		var tr = $('<tr id="tr' + durchgang + '">').appendTo(table);
+
+		for (i=0;i<5;i++)
+		 {
+		 	var td = $('<td>', {
+		 			id:'td' + i
+		 		}).appendTo(tr);
+			td.on('click', function(){
+				if ($('.ok', this).length > 0)
+				{
+					$('.ok', this).attr('class', 'click');
+					$(this).attr('class', 'click');
+				}
+				else {
+					$('.click', this).attr('class', 'ok');
+					$(this).attr('class', 'ok');
+
+				}
+			})
+
+			var img = $('<img class="ok">', {
+						id:'img' + i
+					}).appendTo(td);
+		 }
+
+	}
+
+	var wuerfeln = function()
+	{
+		createWuerfel();
+		var trlast = $('table tr:last');
+		var wuerfel = $('img.ok', trlast);
+
+		for(i=0;i<6;i++)
+		{
+			var path;
+			// if (firstone) {console.log($('table').prev().find('td').eq(i))};
+			if ($('table').prev().find('td').eq(i).hasClass('click'))
+			{
+					var lasttd = $('table').prev().find('tr').eq(i);
+					console.log(lasttd);
+					var lastimg = $('img', lasttd);
+					path = lastimg.attr('src');
+					console.log(path);
+			}
+			else
+			{
+				path =  'wuerfel/wuerfel' + Math.floor(Math.random() * 6 +1) + "cols5.jpg"
+			}
+
+			$(wuerfel[i]).attr('src', path);
+		}
+		firstone = true;
+	}
+
+	 	$(document).ready( function()
+	 	{
+			wuerfeln();
+
+
+			$('#wuerfeln').on('click', function(){
+				wuerfeln();
+			});
+
+		});
+
+	</script>
+
+	<style>
+
+	.click{
+		background-color: red;
+	}
+	td{
+		/* width:200px;
+		height:200px; */
+		border: 2px;
+		border-style: double;
+	}
+	</style>
+</head>
+<body>
+	<div id="irgendwas">
+	</div>
+	<div><button id="wuerfeln"> Würfeln </button>
+</body>
+</html>

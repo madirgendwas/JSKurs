@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+	<title>Währungsrechner</title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="wififunktionen.js"></script>
+	<script>
+
+	var rechneNeu = function(){
+  	var betrag = $('#betrag').val() * 1;
+		if(isNaN(betrag))
+		{
+			alert('Bitte einen Betrag eingeben');
+		}
+		var vonrate, aufrate;
+//		var voncurr, aufcurr;
+
+//		$('#vonflag').attr("src", getFlag($('#vonw').html()));
+
+		rate = $('#vonw').val();
+		betrag = runden(betrag / rate, 6);
+
+		rate = $('#aufw').val();
+		betrag = runden(betrag * rate, 2);
+
+		$('#ausgabefeld').val(betrag);
+	}
+
+	var setFlag = function(isoCode, id){
+		console.log(isoCode);
+		var flagurl;
+		$.ajax({
+			method:'POST',
+			url:'http://wifi.1av.at/527/getflag.php',
+			data:{"currency":isoCode},
+			dataType:'json',
+			success:function(flag){
+				$(id).attr("src", flag.flag)
+			}// sucess
+		}); // ajax
+	}
+
+	$(document).ready(function()
+	{
+		var selectvon, selectbis
+
+		$('#ausgabefeld').val(0);
+
+		selectvon = $('<select id="vonw">');
+		selectbis = $('<select id="aufw">');
+
+		selectvon.appendTo('div:nth-child(1)');
+		selectbis.appendTo('div:nth-child(2)');
+
+		$.ajax({
+			method:'GET',
+			url:'http://wifi.1av.at/527/ecb.php',
+			success:function(xml){
+				var i=0;
+				var option;
+				option = $('<option>', {
+								value: 1,
+								text : 'EUR'
+				}); // option
+				$('#vonw').append(option);
+				$('#aufw').append(option.clone());
+				$('Cube Cube Cube', xml).each(function(){
+					option = $('<option>', {
+									value: $(this).attr('rate') * 1,
+									text : $(this).attr('currency')
+					}); // option
+					$('#vonw').append(option);
+ 					$('#aufw').append(option.clone());
+				}); //for each function
+			$('#aufw option').eq(1).prop( 'selected', true);
+			} // sucess
+
+		}); // ajax
+
+		$('select').on('change', rechneNeu);
+		$('#betrag').on('input', rechneNeu);
+		$('#vonw').on('change', function(){
+			setFlag($("#vonw option:selected").text(), '#vonflag');
+		});
+		$('#aufw').on('change', function(){
+			setFlag($("#aufw option:selected").text(), '#aufflag');
+		});
+
+		setFlag('EUR', '#vonflag');
+		setFlag('USD', '#aufflag');
+
+
+
+	}); //document
+	</script>
+	<style>
+		input
+		{
+    	text-align: right;
+		}
+
+		img{
+			margin-top: 10px;
+			height:22px;
+			width: 40px;
+		}
+	</style>
+</head>
+<body>
+	<form id="form">
+		<div>
+			<img id="vonflag" src="">
+			<input type="text" id="betrag" autocomplete="off" onClick="this.setSelectionRange(0, this.value.length)">
+		</div>
+		<div>
+			<img id="aufflag" src="">
+			<input type="text" id="ausgabefeld" readonly>
+		</div>
+	</form>
+
+</body>
+</html>

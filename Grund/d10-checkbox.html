@@ -1,0 +1,73 @@
+
+<!doctype html>
+<html>
+<head>
+	<title>Taxi </title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+    var CheckBox = function(){
+        var checked = false;
+		this.canvastag = $("<canvas>").attr({height:40,width:40});
+		$('body').append(this.canvastag);
+		this.canvas = $(this.canvastag).get(0).getContext('2d');
+
+		this.zeichneRahmen = function(){
+			this.canvas.clearRect(0, 0, 40, 40);
+			this.canvas.fillStyle = '#fff';
+			this.canvas.strokeStyle = '#000';
+
+			this.canvas.beginPath();
+			this.canvas.strokeRect(2,2, 38, 38);
+
+		}
+		this.checkit = function(){
+			if(checked){
+				this.canvas.clearRect(0, 0, 40, 40);
+				this.zeichneRahmen();
+				checked=false;
+			}
+			else {
+				this.zeichneCheck();
+				checked=true;
+			}
+		}
+
+		this.zeichneRahmen();
+
+		this.zeichneCheck = function(){
+			var x = 10;
+			var y = 20;
+
+			for(i=0;i<10;i++)
+			{
+				this.zeichneRahmen();
+				this.canvas.beginPath();
+				this.canvas.moveTo(10, 20);
+				this.canvas.lineTo(10 + i, 20 + (i*1.5));
+				this.canvas.stroke();
+			}
+		};
+
+		this.canvastag.on('click', this.checkit.bind(this));
+    };
+
+     $(document).ready(function() {
+
+         checkbox = new CheckBox();
+		 checkbox1 = new CheckBox();
+		 checkbox2 = new CheckBox();
+	     checkbox3 = new CheckBox();
+
+     });
+
+
+	</script>
+	<style>
+    #mycanvas {border:1px solid};
+	</style>
+</head>
+<body>
+</body>
+</html>

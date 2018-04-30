@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+		<script src="jquery-3.3.1.min.js"></script>
+		<script src="jquery-rot.js"></script>
+		<script>
+
+	$.fn.colornumber = function(options){
+			var settings = $.extend({
+				r:0,
+				g:0,
+				b:0
+			}, options)
+			var farbe = 'rgb('+settings.r+','+settings.g+','+settings.b+')';
+			console.log(farbe);
+
+			return this.each( function() {
+
+					//$(this).html($(this).html().replace(/[0-9]{1,}/g,"$1"));
+					$(this).html($(this).html().replace(/([0-9]{1,})/g, '<n>$1</n>'));
+					$('n', this).css({color:farbe, 'font-weight':'bold', 'font-size':'28px'});
+					//$(this).html($(this).html().replace(/[0-9]{1,}/g, "$1"));
+					//$(this).html($(this).html().replace(/[0-9]/g, $1));
+					// kurze
+					//text = this.innerHTML;
+					// text = text.replace(/[0-9]/g, '<span style="color:red">' + +1 + '</span>')
+					// console.log(text);
+
+
+				// Kurze version-----------------------------------------------------------------------------------------------
+					// var inhalt = 	$(this).html(), neu='', tagistda = false;
+					//
+					// for(i in inhalt)
+					// {
+					// 	if(inhalt[i] == "<") {tagistda = true}
+					// 	if(inhalt[i] == ">") {tagistda = false}
+					// 	neu+= isFinite(inhalt[i]) && inhalt[i] != ' ' && !tagistda ? "<n>" + inhalt[i] + "</n>" : inhalt[i];
+					// }
+					// this.innerHTML = neu;
+					// $('n', this).css({color:'red', 'font-weight':'28px'});
+
+				// lange--------------------------------------------------------------------------------------------------------
+				/// version mit javascript
+				// var mytext = this.innerHTML;
+				// var newtext = "";
+				// for (i=0;i<mytext.length;i++)
+				// {
+				// 	if(isNaN(mytext.substr(i, 1)) == false)
+				// 	{
+				// 		newtext+='<span style="color:' + farbe + '">' + mytext.substr(i, 1) + '</span>'
+				// 	}
+				// 	else
+				// 	{
+				// 		newtext+=mytext.substr(i, 1);
+				// 	}
+				// 	console.log(newtext);
+				// }
+				// console.log(newtext);
+				//$(this).html(newtext);
+				// var text = $(this).html().replace('A', '*');
+				// console.log(text);
+			} );
+		}
+
+		$.fn.setEmail = function(){
+
+				return this.each( function() {
+
+				var inhalt = $(this).html();
+				var neuinhalt = "", zwichendurch='', habemail=false;
+
+				for(i in inhalt)
+				{
+					if (inhalt[i] == " ")
+					{
+						neuinhalt+= habemail ? '<a href="mailto:'+ zwichendurch + '">' + zwichendurch + '</a>' : zwichendurch;
+						neuinhalt+=" ";
+						zwichendurch ='';
+						habemail = false;
+					}
+					if (inhalt[i] == "@")
+					{
+						habemail = true;
+					}
+						zwichendurch+=inhalt[i];
+					}
+
+				  neuinhalt+= habemail ? '<a href="mailto:'+ zwichendurch + '">' + zwichendurch + '</a>' : zwichendurch;
+
+				 this.innerHTML=neuinhalt;
+				 $('.mail', this).css({cursor:'pointer', 'text-decoration': 'underline'});
+
+				} );
+			}
+
+
+</script>
+
+	<script>
+	$( document ).ready(function(){
+		$('p').colornumber({g:80, b:220, r:22});
+		$('p').setEmail();
+	})
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+	<p> Absatz 1: Textewas</p>
+	<p class="nocolor"> Absatz 2: Textewas</p>
+	<p> Absatz 3: Texte  5000  was</p>
+
+		<p> das ist ein text der am schirm steht eventuell auch mit email adressen
+			wie erste@mail.at und zweite@mail.at die auch klickbar sein sollen und am schluss letzte@last.at</p>
+</body>
+</html>

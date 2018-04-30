@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script>
+	window.onload =function()
+	{
+		document.getElementById('starter').onclick = function( event )
+		{
+			event.preventDefault();
+			document.getElementById('alter').style.color = "";
+			document.getElementById('geschlecht').style.color = "";
+			document.getElementById('ausgabefeld').innerHTML = "";
+			var iserror = false;
+			var alter = document.getElementById('alter').value * 1;
+			var geschlecht
+			if (document.getElementById('w').checked)
+			{
+				geschlecht = "w"
+			}
+			if (document.getElementById('m').checked)
+			{
+				geschlecht = "m"
+			}
+
+			if(!(alter >=2) || !(alter <=120))
+			{
+				iserror = true;
+				document.getElementById('ausgabefeld').innerHTML = "Falsches Alter";
+				document.getElementById('alter').style.color = "red";
+			}
+
+			if (geschlecht != 'm' && geschlecht != 'w')
+			{
+			document.getElementById('ausgabefeld').innerHTML+= " Falsches Geschlecht";
+			document.getElementById('geschlecht').style.color = "red";
+			iserror = true;
+			}
+
+			if (!iserror)
+			{
+				if(geschlecht == 'm')
+				{
+					if (alter < 19)
+					{
+						document.getElementById('ausgabefeld').innerHTML= "Bub";
+					}
+					else
+					{
+						document.getElementById('ausgabefeld').innerHTML= "Mann";
+					}
+				}
+				if(geschlecht == 'w')
+				{
+					if (alter < 19)
+					{
+						document.getElementById('ausgabefeld').innerHTML= "Mädchen";
+					}
+					else
+					{
+						document.getElementById('ausgabefeld').innerHTML= "Frau";
+					}
+				}
+			}
+		}
+	}
+  </script>
+	<style>
+	</style>
+</head>
+<body>
+	<form>
+		Alter [2-120]:  <input id="alter" autocomplete="off"> </br>
+		<fieldset id ="geschlecht">
+				<label for="geschlecht"> Geschlecht:</label>
+	 			<input type="radio" name="geschlecht" id="w" value="w" checked> weiblich
+	 			<input type="radio" name="geschlecht" id="m" value="m"> männlich
+ 		</fieldset>
+
+
+		<button id="starter"> Ausgabe </button>
+		<div id="ausgabefeld"/>
+</body>
+</html>

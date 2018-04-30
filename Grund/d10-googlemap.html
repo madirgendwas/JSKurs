@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
+	<script>
+	kartenoption = {
+		center:{lat:10, lng:10},
+		zoom:13
+	}
+
+	$(document).ready(function(){
+		var position = {lat:48.212, lng:16.448}
+		karte.setCenter(position);
+
+		var meinMarker = new google.maps.Marker({
+			position: position,
+			map:karte,
+			label:"da will ich hin"
+		})
+
+		karte.setCenter(position);
+
+
+		navigator.geolocation.getCurrentPosition(function(position){
+				new google.maps.Marker({
+				position: {lat:position.coords.latitude, lng:position.coords.longitude},
+				map:karte,
+				label:"da bin ich"
+			});
+		karte.setCenter({lat:position.coords.latitude, lng:position.coords.longitude});
+		});
+	});
+
+	var karte;
+	var initMap = function(){
+		karte = new google.maps.Map(document.getElementById("meineKarte"), kartenoption);
+
+	};
+
+
+	</script>
+	<style>
+	#meineKarte {width:600px; height:600px; border:1px solid;}
+	</style>
+</head>
+<body>
+	Hi,
+	<div id="meineKarte"></div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+	<title>ArrayTester</title>
+	<meta charset="utf-8">
+	<script>
+	var zahlen = [];
+
+	window.onload = function()
+	{
+		 var gefunden = false;
+		 var maxIndex = 0;
+   	 var maxZahl = 0;
+
+		 while(zahlen.length<6)
+		 {
+	 		meineZahl = Math.floor(Math.random()*45)+1;
+			var j = 0;
+			gefunden = false;
+			for (j=0;j<zahlen.length;j++)
+			{
+				if(zahlen[j] == meineZahl)
+				{
+					gefunden = true;
+				}
+			}
+			if (gefunden == false)
+			{
+				zahlen.push(meineZahl)
+				// if (meineZahl > maxZahl)
+				// {
+				// 	maxZahl = meineZahl;
+				// 	maxIndex = zahlen.length -1 *1;
+				// }
+			}
+		}
+
+		maxZahl = Math.max.apply(Math, zahlen);
+
+		div = document.getElementById('ausgabe');
+
+		var text ="";
+		for (j=0;j<zahlen.length;j++)
+		{
+			span = document.createElement('span');
+			div.appendChild(span);
+			span.innerHTML = zahlen[j] + "<br>";
+			span.style.color = maxZahl == zahlen[j] ? "red" : "black";
+		}
+		console.log(zahlen);
+		//document.getElementById('ausgabe').innerHTML = text;
+	}
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+	<div id="ausgabe"></div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+	<title>Währungsrechner</title>
+	<meta charset="utf-8">
+	<script src="wififunktionen.js"></script>
+	<script>
+	window.onload = function()
+	{
+		el('form').onchange = function()
+		{
+			var betrag = el('betrag').value * 1;
+			if(isNaN(betrag))
+			{
+				betrag = makebetrag(el('betrag').value);
+			}
+			if (isNaN(betrag))
+			{
+				el('ausgabefeld').value = "Bitte einen gültigen Betrag eingeben"
+			}
+			else
+			{
+				var vonw = el('vonw').value;
+				var aufw = el('aufw').value;
+				if (vonw == aufw)
+				{
+					el('ausgabefeld').innerHTML = betrag;
+				}
+				else if (vonw == "EUR")
+				{
+					betrag = runden(betrag * 1.23, 2);
+				}
+				else
+				{
+					betrag = runden(betrag * 0.81, 2);
+				}
+				el('ausgabefeld').value = betrag;
+			}
+			// var field =
+			// if (el('betrag').hasFocus())
+			// 	{
+			// 		el('betrag').select();
+      //  }
+		}
+	}
+	</script>
+	<style>
+		input
+		{
+    	text-align: right;
+		}
+	</style>
+</head>
+<body>
+	<form id=form>
+		<input type="text" id="betrag" autocomplete="off" onClick="this.setSelectionRange(0, this.value.length)"/>
+		<select id="vonw">
+			<option value="EUR">EUR</option>
+			<option value="USD">USD</option>
+		</select>
+		<select id="aufw">
+			<option value="EUR">EUR</option>
+			<option value="USD">USD</option>
+		</select>
+
+		<input type="text" id="ausgabefeld" readonly>
+	</form>
+</body>
+</html>

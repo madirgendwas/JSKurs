@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script>
+
+var aendernHGFarbe = function()
+{
+	document.getElementById('errortext').innerHTML = "";
+	var R, G, B;
+	R = document.getElementById('R').value * 1;
+	G = document.getElementById('G').value * 1;
+	B = document.getElementById('B').value * 1;
+	var hexString = R.toString(16);
+	hexString+= G.toString(16);
+	hexString+= B.toString(16);
+	console.log(hexString);
+	var farbe= '#' + hexString;
+	document.getElementById('body').style.backgroundColor = farbe;
+//			if(document.getElementById('body').style.backgroundColor != document.getElementById('feld').value)
+//			{
+//				console.log(document.getElementById('body').style.backgroundColor)
+//				console.log(document.getElementById('feld').value)
+//				document.getElementById('errortext').innerHTML = "Keine dementsprechende Farbe im System gefunden";
+//			};
+
+
+}
+
+	window.onload = function()
+	{
+			aendernHGFarbe();
+
+
+		document.getElementById('R').onchange = function(event)
+		{
+			event.preventDefault();
+				aendernHGFarbe();
+		}
+		document.getElementById('G').onchange = function(event)
+		{
+			event.preventDefault();
+			aendernHGFarbe();
+		}
+
+		document.getElementById('B').onchange = function(event)
+		{
+			event.preventDefault();
+			aendernHGFarbe();
+		}
+
+	}
+
+	</script>
+	<style>
+	#formular{
+		position: fixed; // absolute; relative;
+		top:0;
+		left:0;
+		right:0;
+		background:#fff;
+		padding:10px;
+		}
+		input{
+			width:150px;
+		}
+
+	</style>
+</head>
+<body id="body">
+	<form id="formular">
+	Bitte Farbe eingeben RGB:
+	  <input autocomplete="off" id="R" type="range" min="0" max="255"/>
+		<input autocomplete="off" id="G" type="range" min="0" max="255"/>
+		<input autocomplete="off" id="B" type="range" min="0" max="255"/>
+		<div id="errortext"/>
+	<form>
+</body>
+</html>

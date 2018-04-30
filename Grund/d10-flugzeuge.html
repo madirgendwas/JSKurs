@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="wififunktionen.js"></script>
+	<script>
+    var Flugzeug = function(){
+        Math.zufall = function(i, j){
+            return Math.floor(Math.random() * (j-i + 1)) + 1;
+        }
+        var _this = this;
+        this.groesse = 18;
+        this.active = false;
+        this.posX = Math.zufall(20, 780);
+        this.posY =Math.zufall(20, 380);
+        this.speed = Math.zufall(1, 4);
+        this.richtung = Math.zufall(0, 360);
+
+		var fliegersvg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+		fliegersvg.setAttribute('id', 'Image');
+		fliegersvg.setAttribute('width', '13px');
+		fliegersvg.setAttribute('height', '13px');
+		fliegersvg.setAttribute('viewBox', '0 0 510 510');
+		var fliegerpath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		fliegerpath.setAttribute('d', "M510,255c0-20.4-17.85-38.25-38.25-38.25H331.5L204,12.75h-51l63.75,204H76.5l-38.25-51H0L25.5,255L0,344.25h38.25 l38.25-51h140.25l-63.75,204h51l127.5-204h140.25C492.15,293.25,510,275.4,510,255z");
+		//fliegerpath.setAttribute('fill', 'red');
+		var fliegerg = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		//fliegerg.setAttribute('fill', 'red');
+		$(fliegerg).append(fliegerpath);
+
+		$(fliegersvg).append(fliegerg);
+
+        this.flieger = $('<div>').css({position:'absolute'});
+		this.flieger.append(fliegersvg);
+        this.flieger.appendTo("#rahmen");
+		//$('#rahmen').append(fliegersvg);
+
+        this.flieg = function(){
+            this.posX+= this.speed * Math.cos(this.richtung/180*Math.PI );
+            this.posY+= this.speed * Math.sin(this.richtung/180*Math.PI );
+            if(this.posX >= $("#rahmen").width()-this.groesse || this.posX <= 0){
+                this.richtung = 180-this.richtung;
+            }
+
+            if(this.posY >= $("#rahmen").height()-this.groesse || this.posY <= 0){
+                this.richtung = 360-this.richtung;
+            }
+
+            this.setPosition();
+            setTimeout( this.flieg.bind(this), 40);
+        }
+
+        this.setColor = function(color){
+            this.flieger.css({background:color});
+        }
+
+        this.setPosition = function(){
+            this.flieger.css({left:this.posX, top:this.posY});
+        }
+        this.setPosition();
+
+
+        this.flieger.on('click', function(event){
+            event.stopPropagation();
+			_this.flieger.find('path').css({"fill":"green"});
+            _this.active = true;
+        });
+
+        $('#rahmen').on('click', function(event){
+            if (! _this.active) {return};
+            var clickX = event.pageX - $('#rahmen').offset().left;
+            var clickY = event.pageY - $('#rahmen').offset().top;
+            var diffX = clickX - _this.posX;
+            var diffY = clickY - _this.posY;
+            var diffradius = 180 / Math.PI * Math.atan2(diffY, diffX);
+            _this.richtung = diffradius;
+            _this.setColor('#f00')
+            _this.active = false;
+        });
+    }
+
+    Flugzeug.kollision = function(alleFlieger){
+        for (i=0;i<alleFlieger.length;i++){
+            var x = alleFlieger[i].posX;
+            var y = alleFlieger[i].posY;
+            var g = alleFlieger[i].groesse;
+
+            for (j=i+1;j<alleFlieger.length;j++){
+                var x2 = alleFlieger[j].posX;
+                var y2 = alleFlieger[j].posY;
+                var g2 = alleFlieger[j].groesse;
+                var abstand = Math.sqrt(Math.pow(x2-x, 2) + Math.pow(y2-y, 2));
+
+                if (abstand < 20){
+                    alert("crash");
+                }
+            }
+        }
+
+        setTimeout(function(){
+            Flugzeug.kollision(alleFlieger)}, 40);
+    };
+
+
+    $(document).ready(function(){
+
+        var meineFlieger = [];
+
+        var createFlieger = function(){
+            meineFlieger[meineFlieger.length] = new Flugzeug();
+            meineFlieger[meineFlieger.length -1].flieg();
+            setTimeout(function(){
+                createFlieger()}, 3000);
+        };
+
+        createFlieger();
+        Flugzeug.kollision(meineFlieger);
+
+    });
+
+	</script>
+	<style>
+    #rahmen{
+        border:1px solid;
+        width:800px;
+        height:400px;
+        position:relative;
+    }
+
+
+    #rahmen div::before{
+        display:block;
+        content:'';
+        position:absolute;;
+        border:1px solid #000;
+        border-radius:50%;
+        width:30px;
+        height:30px;
+        left:-10px;
+        top:-8px;
+    }
+	</style>
+</head>
+<body>
+    <div id="rahmen"></div>
+</body>
+</html>

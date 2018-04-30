@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+		<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+		var Countdown = function(){
+
+			this.counter = 10;
+			this.node = this.makecanvas();
+
+			this.ctx  = this.node.getContext('2d');
+			winkel = 0;
+		}
+
+		Countdown.prototype.makecanvas = function(){
+			return $("<canvas>").attr({height:200,width:200}).get(0);
+		}
+
+		Countdown.prototype.startCounter = function(){
+			this.zeichne();
+			this.counter--;
+			if (this.counter >= 0 ){
+				setTimeout(this.startCounter.bind(this), 100);
+			}
+		}
+
+		Countdown.prototype.zeichne = function(){
+			this.ctx.clearRect(0, 0, 200, 200);
+			this.ctx.arc(80,80,70,(winkel - 0.5)*Math.PI,-0.5*Math.PI)
+			this.ctx.stroke();
+			this.ctx.beginPath();
+			this.ctx.font = '30px Arial bold';
+			this.ctx.fillText(this.counter, 65, 65);
+		}
+
+		$(document).ready(function() {
+
+	   		var count1 = new Countdown();
+		 	$(count1.node).appendTo('body');
+		 	count1.startCounter();
+
+		 	var count2 = new Countdown();
+		 	$(count2.node).appendTo('body');
+		 	count2.startCounter();
+	    });
+
+	</script>
+	<style>
+	</style>
+</head>
+<body>
+
+</body>
+</html>

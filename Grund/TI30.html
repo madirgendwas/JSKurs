@@ -1,0 +1,313 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="wififunktionen.js"> </script>
+	<script>
+
+	var on=false;
+
+	window.onload = function()
+	{
+
+		var ceccounter=0;
+		var operant = "";
+		var ergebnis = 0;
+		el('anzeige').value = '';
+
+		var zahleingab = function(zahl)
+		{
+			cecounter = 0;
+			if (el('anzeige').value == "0")
+			{
+				el('anzeige').value = ""
+			}
+			el('anzeige').value = el('anzeige').value + zahl;
+		}
+
+		var rechne = function()
+		{
+			cecounter = 0;
+			console.log(operant, ergebnis);
+			if(operant == '')
+			{
+				ergebnis = el('anzeige').value * 1;
+				el('anzeige').value = 0;
+			}
+			else if (operant == '+')
+			{
+				ergebnis+= el('anzeige').value * 1;
+				el('anzeige').value = 0;
+			}
+			else if (operant == '-')
+			{
+				ergebnis-= el('anzeige').value * 1;
+				el('anzeige').value = 0;
+			}
+			else if (operant == '/')
+			{
+				ergebnis/= el('anzeige').value * 1;
+				el('anzeige').value = 0;
+			}
+			else if (operant == '*')
+			{
+				ergebnis*= el('anzeige').value * 1;
+				el('anzeige').value = 0;
+			}
+			el('anzeige').value = '';
+		}
+
+
+		document.addEventListener
+			('click', function(e)
+				{
+					var target = e.target
+
+					if(target.id == "onoff")
+					{
+						if(on)
+						{
+							on = false;
+							el('anzeige').value = "";
+						}
+						else
+						{
+							on = true
+							ergebnis = 0;
+							el('anzeige').value = "0";
+						}
+					}
+
+					if (!on)
+					{
+						return;
+					}
+
+					if(target.id.substring(0, 1)=='z')
+					{
+						zahleingab(target.id.substring(1, 2));
+
+
+					} // if
+					else
+					{
+						switch(target.id)
+						{
+							case "div":
+								rechne();
+								operant = "/";
+								break;
+
+							case "cec":
+								if(ceccounter == 0)
+								{
+									operant = "";
+									el('anzeige').value = ergebnis;
+									cecounter = 1;
+								}
+								if(ceccounter == 1)
+								{
+									operant = "";
+									ergebnis = 0;
+									el('anzeige').value = ergebnis;
+									cecounter = 0;
+								}
+								break;
+
+
+							case "mal":
+								rechne();
+								operant = "*";
+								break;
+
+							case "minus":
+								rechne();
+								operant = "-";
+								break;
+
+							case "plus":
+								rechne();
+								operant = "+";
+								break;
+
+							case "istgleich":
+								rechne();
+								operant = "=";
+								el('anzeige').value = ergebnis;
+								break;
+						} // switch
+					} // else
+				}
+			, false);
+}
+
+	</script>
+	<style>
+	#TI30{
+		position:absolute;
+		width:610px;
+	}
+
+	#block{
+		position:relative;
+
+	}
+
+	.normtasten {
+		position: absolute;
+		display:block;
+		width: 30px;
+		height: 20px;
+		border: 1px solid red;
+	}
+
+	.notnormtasten {
+		position: absolute;
+		display:block;
+		width: 35px;
+		height: 35px;
+		border: 1px solid red;
+	}
+
+
+	#z7{
+		top:calc(445px - 38px);
+		left:calc(289px - 48px);
+	}
+
+	#z8{
+		top:calc(445px - 38px);
+		left:calc(289px);
+	}
+
+	#z9{
+		top:calc(445px - 38px);
+		left:calc(289px + 48px);
+	}
+
+	#z4{
+		top:calc(445px);
+		left:calc(289px - 48px);
+	}
+
+	#z5{
+		top:445px;
+		left:289px;
+	}
+
+	#z6{
+		top:calc(445px);
+		left:calc(289px + 48px);
+	}
+
+	#z1{
+		top:calc(445px + 38px);
+		left:calc(289px - 48px);
+	}
+
+	#z2{
+		top:calc(445px + 38px);
+		left:calc(289px);
+	}
+
+	#z3{
+		top:calc(445px + 38px);
+		left:calc(289px + 48px);
+	}
+
+	#z0{
+		top:calc(445px + (38px * 2));
+		left:calc(289px - 48px);
+	}
+
+	#point{
+		top:calc(445px + (38px * 2));
+		left:289px;
+	}
+
+	#plusminus{
+		top:calc(445px + (38px * 2));
+		left:calc(289px + 48px);
+	}
+
+	#cec{
+		top:calc(445px - (38px * 5));
+		left:calc(289px + (48px * 2));
+	}
+
+	#onoff{
+		top:calc(445px - (38px * 6.5));
+		left:calc(289px + (48px * 2));
+	}
+
+
+	#div{
+		top:calc(465px - (46px * 3));
+		left:383px;
+	}
+
+	#mal{
+		top:calc(465px - (46px * 2));
+		left:383px;
+	}
+
+	#minus{
+		top:calc(465px - 46px);
+		left:383px;
+	}
+
+	#plus{
+		top:465px;
+		left:383px;
+	}
+
+	#istgleich{
+		top:calc(465px + 45px);
+		left:383px;
+	}
+
+#anzeige{
+	position: absolute;
+	display:block;
+	top:119px;
+	left:195px;
+	width: 219px;
+	height: 52px;
+	background-color: grey;
+	border:none;
+	text-align:right;
+	font-size: 44px;
+	/* border: 1px solid red; */
+}
+
+	</style>
+</head>
+<body>
+	<div id="block">
+		<img id="TI30" src="TI30.jpg"></img>
+		<input id="anzeige" type="text" readonly>
+		<a class="normtasten" id="z7"></a>
+		<a class="normtasten" id="z8"></a>
+		<a class="normtasten" id="z9"></a>
+		<a class="normtasten" id="z4"></a>
+		<a class="normtasten" id="z5"></a>
+		<a class="normtasten" id="z6"></a>
+		<a class="normtasten" id="z1"></a>
+		<a class="normtasten" id="z2"></a>
+		<a class="normtasten" id="z3"></a>
+		<a class="normtasten" id="z0"></a>
+		<a class="normtasten" id="point"></a>
+		<a class="normtasten" id="plusminus"></a>
+
+		<a class="normtasten" id="onoff"></a>
+		<a class="normtasten" id="cec"></a>
+
+		<a class="notnormtasten" id="div"></a>
+		<a class="notnormtasten" id="mal"></a>
+		<a class="notnormtasten" id="minus"></a>
+		<a class="notnormtasten" id="plus"></a>
+		<a class="notnormtasten" id="istgleich"></a>
+	</div>
+</body>
+</html>

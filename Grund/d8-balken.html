@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="wififunktionen.js"></script>
+	<script>
+
+	var countdownAnimation = function(rest, start) {
+		$('#balken').val(rest / 5 / 1000);
+		if (rest <= 0 ) return;
+		requestAnimationFrame(function() {
+			rest = rest - (Date.now() - start);
+		{
+				countdownAnimation(rest, Date.now());
+			};
+		});
+	};
+
+	var countdownTime = function(interval) {
+		$('#time').html(interval);
+
+		if (interval <= 0 ) {
+			return;
+		};
+		setTimeout(function() {
+			interval--
+			countdownTime(interval);
+		}, 1000);
+	};
+
+	var countdownBar = function(sekunden){
+		var stufen = 10;
+		var meinI = setInterval(function(){
+			var wert = $('#balken1').val();
+			if (wert == 0) {clearInterval(meinI); return;};
+			$('#balken1').val(wert -1/sekunden/stufen);
+		}, 1000/stufen)
+	}
+
+	var countdownDiv = function(sekunden){
+		var stufen = 1;
+		var wert = 1;
+		var meinI = setInterval(function(){
+			wert -= 1/sekunden/stufen;
+			if (wert == 0) {clearInterval(meinI); return;};
+			$('#progress div').css({width: (wert*100) + '%'});
+			if (wert < 0.5) {
+				$('#progress div').css({background:'orange'})
+			};
+			if (wert < 0.25) {
+				$('#progress div').css({background:'red'})
+			}
+
+		}, 1000/stufen)
+	}
+
+
+	$(document).on('click', '#start', function() {
+		countdownAnimation(5 * 1000, Date.now());
+		countdownTime(5);
+		countdownBar(5);
+		$('#progress div').css({background:'green'})
+		countdownDiv(5);
+		$('#progressanim div').animate({width:0}, 5*1000, 'linear');
+	});
+
+	</script>
+	<style>
+
+		#progress {
+			border:1px solid;
+
+			width:300px;
+			height:30px; */
+		}
+
+		#progressanim {
+			border:1px solid;
+
+			width:300px;
+			height:30px; */
+		}
+		#progressanim div {
+			width:100%;
+			height: 100%;
+			background:green;
+			transition: background 1s;
+		}
+
+
+		#progress div {
+			width:100%;
+			height: 100%;
+			background:green;
+			transition: background 1s;
+		}
+
+
+		#balken{
+			height:30px;
+		}
+
+		#time{
+			margin-top: 40px;
+			font:30px Arial;
+		}
+
+	</style>
+</head>
+<body>
+	<progress id="balken" value="0.5"></progress>
+	<progress id="balken1" value="1"></progress>
+	<div id="progress"><div></div></div>
+	<div id="progressanim"><div></div></div>
+	<div id="time">5</div>
+	<button id="start">Start</button>
+</body>
+</html>

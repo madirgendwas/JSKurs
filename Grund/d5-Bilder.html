@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+
+	var aktuelles = 0;
+	var bilder = [];
+	bilder[0] = "das-paradies-fuer-wintersportler.jpg";
+	bilder[1] = "endlos-weite-schwuenge-ueber-perfekt-praeparierte-pisten-ziehen.jpg";
+	bilder[2] = "erlebnishotel-fendels-familienhit.jpg";
+	bilder[3] = "fruehlings-special-top-of-tyrol.jpg";
+	bilder[4] = "hotel-tia-monte-nahe-am-gletscher.jpg";
+
+	var vorher = function(){
+		$('#bild img').hide();
+		aktuelles--
+		if (aktuelles < 0)
+		{
+			aktuelles=bilder.length -1
+		}
+		$('#bild img').eq(aktuelles).fadeIn();
+	}
+
+	var nachher = function(){
+		$('#bild img').hide();
+		aktuelles++
+		if (aktuelles == bilder.length)
+		{
+			aktuelles=0
+		}
+		$('#bild img').eq(aktuelles).fadeIn();
+	}
+
+	$(document).ready(function(){
+
+		for (i in bilder)
+		{
+			console.log('tirolbilder/' + bilder[i])
+
+		  $('<img>')
+				.attr('src', 'tirolbilder/' + bilder[i])
+				.appendTo('#bild')
+				.hide();
+		}
+
+		$('#bild img')
+		    .eq(aktuelles)
+				.fadeIn();
+
+		$('#btn_n').on('click', function(){
+			nachher();
+		})
+
+		$('#btn_v').on('click', function(){
+			vorher();
+		})
+	});
+
+
+	</script>
+	<style>
+	div{
+		position:relative;
+	}
+	#bild{
+		position:absolute;
+		top:0
+		left:0
+	}
+	img{
+		position:absolute;
+		top:0;
+		left:0;
+	}
+
+	#vor{
+		position:absolute;
+		top:0;
+		width:100px;
+		height:411px;
+		left:0;
+		cursor:pointer;
+		z-index: 1000;
+	}
+
+	#nach{
+		position:absolute;
+		top:0;
+		width:100px;
+		height:411px;
+		left:520px;
+		cursor:pointer;
+		z-index: 1000;
+	}
+
+	#button{
+		top:435px;
+
+	}
+	</style>
+</head>
+<body>
+	<div id="gesamt">
+		<div id="firstone">
+			<div id="bild">
+				<div id="vor" onclick="vorher()"></div>
+				<div id="nach" onclick="nachher()"></div>
+				<!-- <button id="btn_inv_v" class="invisible"> </button> -->
+			</div>
+			<div>
+				<div id="button">
+					<button id="btn_v">Voriges</button>
+  			<button id="btn_n">Nächstes</button>
+			</div>
+		</div>
+</body>
+</html>
