@@ -1,0 +1,103 @@
+
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?callback=initMap"></script>
+	<script>
+
+    kartenoption = {
+        center:{lat:43, lng:43},
+        zoom:6
+    }
+
+    var ladeLinien = function(){
+        $.ajax({
+            url:'http://localhost:5003/getlinien',
+            method:'POST',
+            contentType: 'application/text',
+            data:{},
+            dataType:'json',
+            success:function(data){
+                console.log(data)
+                   },
+           error:function(){
+                   console.log("read mit error")
+                 }
+
+       })
+    }
+
+    var ladeHaltestellen = function(){
+        $.ajax({
+            url:'http://localhost:5003/gethaltestellen',
+            method:'POST',
+            contentType: 'application/text',
+            data:{},
+            dataType:'json',
+            success:function(data){
+                console.log(data)
+                   },
+           error:function(){
+                   console.log("read mit error")
+                 }
+
+       })
+    }
+
+//     $.ajax({
+//         url:'http://localhost:5003/getsteige',
+//         method:'POST',
+//         contentType: 'application/text',
+//         data:{},
+//         dataType:'json',
+//         success:function(data){
+//             console.log(data)
+//                },
+//        error:function(){
+//                console.log("read mit error")
+//              }
+//
+//    })
+// }
+
+
+
+
+    $( document ).on('click', '#ladelinien', function(){
+        console.log("lade linien")
+        ladeLinien();
+    })
+
+    $( document ).on('click', '#ladehaltestellen', function(){
+        console.log("lade haltestellen")
+        ladeHaltestellen();
+    })
+
+
+    var karte;
+    var geocoder;
+    var initMap = function(){
+        karte = new google.maps.Map(document.getElementById("meineKarte"), kartenoption);
+        geocoder = new google.maps.Geocoder();
+    }
+
+    $(document).ready(function(){
+            initMap();
+    })
+
+	</script>
+	<style>
+    #meineKarte {width:800px; height:800px; border:1px solid;}
+    body {font-family: Arial; font-size: 0.8em;}
+	</style>
+</head>
+<body>
+    <button id="ladelinien"> Lade Linien</button>
+    <button id="ladehaltestellen">Lade Haltestellen</button>
+
+    <div id="meineKarte"></div>
+</body>
+</html>
