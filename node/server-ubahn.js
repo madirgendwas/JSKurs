@@ -4,6 +4,8 @@ var fs      = require ('fs');
 var request = require ('request');
 const csv   = require ('csv')
 
+// Github = wifi527
+
 
 const linienCSV = "https://data.wien.gv.at/csv/wienerlinien-ogd-linien.csv";
 const halteCSV  = "https://data.wien.gv.at/csv/wienerlinien-ogd-haltestellen.csv";
