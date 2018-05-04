@@ -11,8 +11,8 @@ var file4 = "otest.js";
 // var server = cp.fork(file); // starte den server
 // var server1 = cp.fork(file1); // starte den server
 //var server2 = cp.fork(file2); // starte den server
-var server3 = cp.fork(file3); // starte den server
-//var server4 = cp.fork(file4); // starte den server
+//var server3 = cp.fork(file3); // starte den server
+var server4 = cp.fork(file4); // starte den server
 
 console.log("first time start");
 // fs.watchFile(file, function(){
@@ -36,12 +36,12 @@ console.log("first time start");
 //      console.log("start service2");
 //  })
 
-	fs.watchFile(file3, function(){
-		server3.kill();
-  	console.log("stop service3");
-  	server3 = cp.fork(file3);
-  	console.log("start service3");
- })
+// fs.watchFile(file3, function(){
+ //     server3.kill();
+  //    console.log("stop service3");
+   //   server3 = cp.fork(file3);
+    //  console.log("start service3");
+ // })
   
 	fs.watchFile(file4, function(){
       server4.kill();
