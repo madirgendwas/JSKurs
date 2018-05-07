@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	<script>
+
+        var app = angular.module('userApp', []);
+        app.controller ('userController', function( $scope ){
+
+            $scope.lastSort = "A";
+            $scope.users=[];
+            $scope.addUser = function(){
+                if ($scope.textUsername != ""){
+                    $scope.users.push( {userName:$scope.textUsername, checked:true} );
+                    $scope.textUsername = "";
+                    $scope.sortUsers();
+                };
+            };
+            $scope.deleteUsers = function(){
+                for (let i=$scope.users.length -1;i>=0;i--){
+                    if ($scope.users[i].checked){
+                        $scope.users.splice(i, 1);
+                    }
+                }
+            }
+
+            $scope.showAnzahl = function(){
+                if ($scope.users.length == 0){
+                    return ""
+                }
+                else{
+                    return $scope.users.length;
+                }
+            }
+
+            $scope.sortUsersButton = function(){
+                $scope.lastSort = ($scope.lastSort == "A" ? "D" : "A");
+                $scope.sortUsers();
+            }
+            $scope.sortUsers = function(){
+                if($scope.lastSort == "A"){
+                    $scope.users.sort(function(a,b){  return a.userName > b.userName });
+                }
+                else {
+                    $scope.users.sort(function(a,b){  return a.userName < b.userName });
+                }
+
+            }
+
+            $scope.checkuncheckUsers = function(){
+                $scope.users.forEach(function(user){
+                    user.checked = !user.checked;
+                });
+            }
+
+
+            $scope.showSort = function(){
+                return ($scope.lastSort == "A" ? "absteigend" : " aufsteigend");
+            }
+        });
+
+	</script>
+	<style>
+    #header {font-size:40px;}
+    #users {font-size:15px;}
+	</style>
+</head>
+<body ng-app="userApp">
+    <div ng-controller = "userController" id="header"> Anzahl User : <span>{{showAnzahl()}}</span>
+        <form>
+            <input type="text" placeholder="name" ng-model="textUsername"><button ng-click="addUser()">Hinzufügen</button>
+        </form>
+        <div id="users" ng-repeat="u in users">
+            <input type="checkbox" ng-model="u.checked"><span>{{u.userName}}</span>
+        </div>
+        <button ng-click="deleteUsers()">Markierte löschen</button>
+        <button ng-click="sortUsersButton()">sortier Users {{showSort()}}</button>
+        <button ng-click="checkuncheckUsers()">Auswahl umkehren</button>
+    </div>
+</body>
+</html>

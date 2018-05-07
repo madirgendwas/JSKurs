@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<script src="jquery-3.3.1.min.js"></script>
+	<script>
+        var bilder = [];
+        bilder[0] = "das-paradies-fuer-wintersportler.jpg";
+        bilder[1] = "endlos-weite-schwuenge-ueber-perfekt-praeparierte-pisten-ziehen.jpg";
+        bilder[2] = "erlebnishotel-fendels-familienhit.jpg";
+        bilder[3] = "fruehlings-special-top-of-tyrol.jpg";
+        bilder[4] = "hotel-tia-monte-nahe-am-gletscher.jpg";
+
+        beginX = 0, endX=0, screenX=0, aktscreenX=0, diffx=0;
+        beginY = 0, endY=0, screenY=0, aktscreenY=0, diffy=0;
+        bild=0;
+
+
+        var showBild = function(){
+            if (bild < 0)  bild = bilder.length - 1;
+            if (bild > 4)  bild = 0;
+
+            $('#bilder img').remove();
+
+            $('#bilder')
+            .append($('<img>')
+                .attr("src", '../tirolbilder/' + bilder[bild]));
+                $('#bilder').css("margin-top", 0);
+                $('#bilder').css("margin-left", 0);
+        }
+
+        $(document).ready(function(){
+            showBild();
+            $('#bilder').on('touchstart', function(event) {
+                // ermittle Position von Start
+                beginX = event.originalEvent.touches[0].clientX;
+                beginY = event.originalEvent.touches[0].clientY;
+                screenX = event.originalEvent.touches[0].screenX;
+                screenY = event.originalEvent.touches[0].screenY;
+            });
+
+            $('#bilder').on('touchend', function(event) {
+                // ermittle Position von Ende und diff von Start
+
+                endX = event.originalEvent.changedTouches[0].clientX;
+                endY = event.originalEvent.changedTouches[0].clientY;
+                if (endX - beginX < 0) {
+                    $(this).trigger('wischlinks')
+                }
+                else if (endX - beginX > 0) {
+                    $(this).trigger('wischrechts')
+                }
+            });
+
+
+            var handleMotionEvent(event){
+                var x = event.accelerationIncludingGravity.x;
+                var y = event.accelerationIncludingGravity.y;
+                var z = event.accelerationIncludingGravity.z;
+            }
+
+            window.addEventListener("devicemotion", handleMotionEvent, true)
+
+            //  $('#bilder').on('touchmove', function(event) {
+            //      // ermittle Position von Ende und diff von Start
+            //      aktscreenX = event.originalEvent.changedTouches[0].screenX;
+            //      aktscreenY = event.originalEvent.changedTouches[0].screenY;
+            //      diffX = aktscreenX - screenX;
+            //      diffY = aktscreenY - screenY;
+            //      // diffX = (aktscreenX > screenX ? aktscreenX - screenX : screenX - aktscreenX);
+            //      // diffY = (aktscreenY > screenY ? aktscreenY - screenY : screenY - aktscreenY);
+            //      $('#bilder').css("margin-top", diffY);
+            //      $('#bilder').css("margin-left", diffX);
+            // });
+
+            $('#bilder').on('wischlinks', function(){
+                bild--;
+                showBild();
+            });
+
+            $('#bilder').on('wischrechts', function(){
+                bild++;
+                showBild();
+            });
+        });
+
+	</script>
+	<style>
+    img{vertical-align: bottom;}
+    #bilder {border:1px solid #000; display:inline-block;}
+    #bilder img {width:400px; height:300px;}
+	</style>
+</head>
+<body>
+    <div id="bilder"></div>
+</body>
+</html>
