@@ -69,15 +69,26 @@
 		if (countmarker < 2) {
 			return;
 		}
+		var haltestellen = []
 		for (i=0;i<linien.length;i++){
 				setMarker(linien[i].lat, linien[i].lon, linien[i].name)
+				var haltestelle = {lat : linien[i].lat, lng:linien[i].lon}
+				haltestellen.push(haltestelle);
 		}
+
+		var flightPath = new google.maps.Polyline({
+  			path: haltestellen,
+  			geodesic: true,
+  			strokeColor: '#9d6930',
+  			strokeOpacity: 1.0,
+  			strokeWeight: 2
+});
 	}
 
 	var setMarker = function(steglat, steglon, halteort){
 		// console.log(steglat *1, steglon *1)
-		// let ort = {lat:steglat *1, lng:steglon *1}
-		console.log(ort);
+		 let ort = {lat:steglat *1, lng:steglon *1}
+		///console.log(ort);
 		var meinMarker = new google.maps.Marker({
    			position: ort,
    			map:karte,
