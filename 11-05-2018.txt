@@ -1,0 +1,50 @@
+11.5
+    - Zeitplan
+18.5
+    - Datenbank
+    - grundgerüst von html
+    - Stammdaten
+    - Schnittstellenbeschreibung
+25.5
+    - kommen/gehen Schirm
+    - Änderungsdienst (nacherfassung, änderungen)
+01.6
+    - Auswertungen / Druck
+    - Übesichtsschirm (Anwesenheit)
+08.6
+    - Projektbeschreibung
+    - PowerPoint Präsentation
+
+
+Aufbau
+Zeiterfassung /
+    - Erfassen
+    - Stammdaten
+    - Auswertungen
+
+Zeiterfassung /erfassen
+    - Schirm mit buttons für kommen/gehen
+
+Stammdaten /stammdaten
+    - Mitarbeiter
+    - Feiertage
+    - Tätigkeiten
+
+einzelne Stammdaten - darin wie gehabt einzeln zu bearbeiten
+    /stammdaten/mitarbeiter
+    /stammdaten/feiertage
+    /stammdaten/taetigkeiten
+
+
+
+Fragen:
+authentifizierung
+
+wie kann man eine Session (connect zur datenbank beibehalten)
+    - sehr viele informationen auf server / datenbankseite
+    - useranzahl
+
+aufbau von "großen" applicationen (spa)
+indiviuelles design - soweit das ich gar nichts weis
+
+was ist typescript - Angular ab V4
