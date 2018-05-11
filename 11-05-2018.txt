@@ -45,6 +45,9 @@ wie kann man eine Session (connect zur datenbank beibehalten)
     - useranzahl
 
 aufbau von "großen" applicationen (spa)
-indiviuelles design - soweit das ich gar nichts weis
+
+indiviuelles design
+
+ajax verschlüsseln
 
 was ist typescript - Angular ab V4
